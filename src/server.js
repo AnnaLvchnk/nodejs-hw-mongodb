@@ -11,29 +11,23 @@ const PORT = Number(env('PORT', '3000'));
 const setupServer = () => {
   const app = express();
 
-  app.use(
-    express.json({
-      type: ['application/json', 'application/vnd.api+json'],
-    }),
-  );
-
+  const logger = pino({
+    transport: {
+      target: 'pino-pretty',
+    },
+  });
+  app.use(express.json());
+  app.use(logger);
   app.use(cors());
 
-  app.use(
-    pino({
-      transport: {
-        target: 'pino-pretty',
-      },
-    }),
-  );
+  app.use('/', contactsRouter);
 
-  app.use(contactsRouter);
-
-  app.use('*', notFoundHandler);
   app.use(errorHandler);
 
+  app.use('*', notFoundHandler);
+
   app.listen(PORT, () => {
-    console.info(`Server is running on port ${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
   });
 };
 
