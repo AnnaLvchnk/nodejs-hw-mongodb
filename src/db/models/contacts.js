@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+
 import {
   contactTypeList,
   stringLength,
@@ -32,6 +33,11 @@ const contactsSchema = new Schema(
       required: true,
       default: 'personal',
     },
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+      required: true,
+    },
   },
   {
     timestamps: true,
@@ -44,6 +50,5 @@ contactsSchema.post('save', mongooseSaveError);
 contactsSchema.pre('findOneAndUpdate', setUpdateSettings);
 
 contactsSchema.post('findOneAndUpdate', mongooseSaveError);
-
 
 export const ContactsCollection = model('contacts', contactsSchema);
