@@ -1,12 +1,18 @@
 import createHttpError from 'http-errors';
 
-import { findUser, userService } from '../services/auth-services.js';
+import {
+  findUser,
+  requestResetToken,
+  resetPassword,
+  userService,
+} from '../services/auth-services.js';
 import { compareHash } from '../utils/hash.js';
 import {
   createSession,
   findSession,
   deleteSession,
 } from '../services/session-services.js';
+import { contactsService } from '../services/contacts.js';
 
 const setupResponseSession = (
   res,
@@ -99,10 +105,30 @@ export const logoutController = async (req, res) => {
     throw createHttpError(401, 'Session not found');
   }
 
-  await deleteSession({_id: sessionId});
+  await deleteSession({ _id: sessionId });
 
   res.clearCookie('sessionId');
   res.clearCookie('refreshToken');
 
   res.status(204).send();
+};
+
+export const requestResetEmailController = async (req, res) => {
+  await requestResetToken(req.body.email);
+
+  res.json({
+    message: 'Reset password email has been successfully sent.!',
+    status: 200,
+    data: {},
+  });
+};
+
+export const resetPasswordController = async (req, res) => {
+  await resetPassword(req.body);
+
+  res.json({
+    status: 200,
+    message: 'Password has been successfully reset.',
+    data: {},
+  });
 };

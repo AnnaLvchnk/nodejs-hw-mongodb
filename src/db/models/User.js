@@ -1,7 +1,6 @@
 import { Schema, model } from 'mongoose';
 
 import { mongooseSaveError, setUpdateSettings } from './hooks.js';
-// import { required } from 'joi';
 import { stringLength } from '../../constants/contacts-constants.js';
 import { emailRegexp } from '../../constants/user-constants.js';
 
@@ -22,7 +21,7 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    
+
   },
   { timestamps: true, versionKey: false },
 );
