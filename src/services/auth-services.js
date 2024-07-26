@@ -75,6 +75,11 @@ export const resetPassword = async (payload) => {
     throw createHttpError(404, 'User not found');
   }
 
+  // const encryptedPassword = await compareHash(payload.password, user.password);
+  // if (!encryptedPassword) {
+  //   throw createHttpError(401, 'Password not found');
+  // }
+
   const newEncryptedPassword = await hashValue(payload.password);
 
   await User.updateOne({ _id: user._id }, { password: newEncryptedPassword });
